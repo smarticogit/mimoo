@@ -28,7 +28,6 @@ functions:
     handler: index.handler
     events:
       - httpApi: '*'
-
 resources:
   Resources:
     UsersTable:

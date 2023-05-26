@@ -56,6 +56,47 @@ const get = async (req, res) => {
     }
 };
 
+const update = async (req, res) => {
+    const { title, link, description, tags } = req.body;
+    const { toolId } = req.params;
+
+    const params = {
+        TableName: TOOLS_TABLE,
+        Key: {
+            toolID: toolId,
+        },
+        Item: {
+            toolID: toolId,
+            title: title,
+            link: link,
+            description: description,
+            tags: tags
+        }
+    }
+
+    try {
+        const foundItem = await dynamoDbClient.send(new GetCommand(params));
+        const getedTags = foundItem.Item.tags;
+
+        params.Item.title = title ? title : params.Item.title;
+        params.Item.link = link ? link : params.Item.link;
+        params.Item.description = description ? description : params.Item.description
+
+        if (tags) {
+            if (typeof tags === 'string') {
+                getedTags.push(tags);
+            } else {
+                params.Item.tags = tags;
+            }
+        }
+
+        await dynamoDbClient.send(new PutCommand(params));
+        res.status(201).json({ message: "successfully Updated!" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const deleteTool = async (req, res) => {
     const params = {
         TableName: TOOLS_TABLE,
@@ -76,5 +117,5 @@ const deleteTool = async (req, res) => {
     }
 };
 
-module.exports = { create, deleteTool, get, list }
+module.exports = { create, deleteTool, get, list, update }
 
