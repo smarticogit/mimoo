@@ -30,8 +30,8 @@ provider:
           Resource:
             - Fn::GetAtt: [ UsersTable, Arn ]
   environment:
-    USER_POOL: { Ref: UserPool }
-    USER_POOL_CLIENT: 3vktmpciheao8dutf6o9f4auv6  #${self:service}-client-${sls:stage}
+    USER_POOL: { Ref: UserPool } #us-east-1_pXQVf5XVX
+    USER_POOL_CLIENT: { Ref: UserClient } #3vktmpciheao8dutf6o9f4auv6
     TOOLS_TABLE: ${self:custom.tableName}
 
 functions:
@@ -44,6 +44,12 @@ functions:
     events:
       - httpApi:
           path: /register
+          method: post
+  login:
+    handler: controllers/login.login
+    events:
+      - httpApi:
+          path: /login
           method: post
 
 resources:

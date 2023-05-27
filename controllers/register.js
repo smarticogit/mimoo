@@ -35,7 +35,7 @@ module.exports.register = async (event) => {
                 .promise();
         }
 
-        return sendResponse(200, { result });
+        return sendResponse(200, { message: `User ${result.User.Username} created successfull!` });
     } catch (error) {
         console.error(error);
         return sendResponse(400, error);
