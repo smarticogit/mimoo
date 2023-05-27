@@ -33,6 +33,14 @@ provider:
     USER_POOL: { Ref: UserPool } #us-east-1_pXQVf5XVX
     USER_POOL_CLIENT: { Ref: UserClient } #3vktmpciheao8dutf6o9f4auv6
     TOOLS_TABLE: ${self:custom.tableName}
+  httpApi:
+    cors: true
+    authorizers: 
+      userAuthoriser:
+        identitySource: $request.header.Authorization
+        issuerUrl: {"Fn::Join": ["", ["https://cognito-idp.us-east-1.amazonaws.com/", { Ref: UserPool }]]}
+        audience: { Ref: UserClient }
+
 
 functions:
   api:
