@@ -1,6 +1,9 @@
 service: mimoo
 frameworkVersion: '3'
 
+plugins:
+  - serverless-offline
+
 custom:
   tableName: 'tools-table-${sls:stage}'
 
@@ -12,6 +15,12 @@ provider:
       statements:
         - Effect: Allow
           Action:
+          - cognito-idp:AdminInitiateAuth
+          - cognito-idp:AdminCreateUser
+          - cognito-idp:AdminSetUserPassword
+          Resource: "*"
+        - Effect: Allow
+          Action:
             - dynamodb:Query
             - dynamodb:Scan
             - dynamodb:GetItem
@@ -21,6 +30,8 @@ provider:
           Resource:
             - Fn::GetAtt: [ UsersTable, Arn ]
   environment:
+    USER_POOL: { Ref: UserPool }
+    USER_POOL_CLIENT: 3vktmpciheao8dutf6o9f4auv6  #${self:service}-client-${sls:stage}
     TOOLS_TABLE: ${self:custom.tableName}
 
 functions:
@@ -28,8 +39,38 @@ functions:
     handler: index.handler
     events:
       - httpApi: '*'
+  register:
+    handler: controllers/register.register
+    events:
+      - httpApi:
+          path: /register
+          method: post
+
 resources:
   Resources:
+    UserPool:
+      Type: AWS::Cognito::UserPool
+      Properties: 
+        UserPoolName: ${self:service}-pool-${sls:stage}
+        Schema:
+          - Name: email
+            Required: true
+            Mutable: true
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 6
+        AutoVerifiedAttributes: ["email"]
+    UserClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties: 
+        ClientName: ${self:service}-client-${sls:stage}
+        GenerateSecret: false
+        UserPoolId:
+          Ref: UserPool
+        AccessTokenValidity: 5
+        IdTokenValidity: 5
+        ExplicitAuthFlows:
+          - "ADMIN_NO_SRP_AUTH"
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
