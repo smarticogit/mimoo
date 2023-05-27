@@ -43,10 +43,44 @@ provider:
 
 
 functions:
-  api:
-    handler: index.handler
+  delete:
+    handler: controllers/delete.delete
     events:
-      - httpApi: '*'
+      - httpApi:
+          path: /tools/{toolId}
+          method: delete
+          authorizer: 
+            name: userAuthoriser
+  update:
+    handler: controllers/update.update
+    events:
+      - httpApi:
+          path: /tools/{toolId}
+          method: put
+          authorizer: 
+            name: userAuthoriser
+  get:
+    handler: controllers/get.get
+    events:
+      - httpApi:
+          path: /tools/{toolId}
+          method: get
+          authorizer: 
+            name: userAuthoriser
+  create:
+    handler: controllers/create.create
+    events:
+      - httpApi:
+          path: /tools
+          method: post
+          authorizer: 
+            name: userAuthoriser
+  list:
+    handler: controllers/list.list
+    events:
+      - httpApi:
+          path: /tools
+          method: get
   register:
     handler: controllers/register.register
     events:
@@ -59,6 +93,7 @@ functions:
       - httpApi:
           path: /login
           method: post
+
 
 resources:
   Resources:

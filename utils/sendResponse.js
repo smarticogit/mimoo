@@ -1,9 +1,9 @@
-module.exports = (statusCode, body, headers = {}) => ({
+module.exports.sendResponse = (statusCode, body, headers = {}) => ({
     headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
         ...headers,
     },
     statusCode,
-    body: JSON.stringify(body),
+    body: JSON.stringify(body, null, 2),
 });

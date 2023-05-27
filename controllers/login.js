@@ -1,4 +1,4 @@
-const sendResponse = require("../utils/sendResponse");
+const { sendResponse } = require("../utils/sendResponse");
 const formatUserAttributes = require("../utils/formatUserAttributes");
 const { cognito } = require("../utils/providers");
 const USER_POOL = process.env.USER_POOL;
@@ -32,7 +32,6 @@ module.exports.login = async (event) => {
             statusCode: 200,
         });
     } catch (error) {
-        console.error(error);
-        return sendResponse(400, error);
+        return sendResponse(400, { message: error.message });
     }
 };

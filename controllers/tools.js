@@ -1,13 +1,14 @@
 const {
-    DynamoDBClient,
+    dynamoDb,
     PutCommand,
     ScanCommand,
     DeleteCommand,
     GetCommand,
-    uuid
+    uuid,
+    TOOLS_TABLE
 } = require("../utils/providers");
 
-const TOOLS_TABLE = process.env.TOOLS_TABLE;
+
 
 const create = async (req, res) => {
     const { title, link, description, tags } = req.body;
@@ -15,7 +16,7 @@ const create = async (req, res) => {
     const params = {
         TableName: TOOLS_TABLE,
         Item: {
-            toolID: uuid.v1(),
+            toolID: uuid(),
             title: title,
             link: link,
             description: description,
@@ -24,7 +25,7 @@ const create = async (req, res) => {
     };
 
     try {
-        await DynamoDBClient.send(new PutCommand(params));
+        await dynamoDb.send(new PutCommand(params));
         res.status(201).json({ message: "successfully created!" });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -32,8 +33,13 @@ const create = async (req, res) => {
 };
 
 const list = async (req, res) => {
+
+    const params = { 
+        TableName: TOOLS_TABLE
+    }
+
     try {
-        const results = await DynamoDBClient.send(new ScanCommand({ TableName: TOOLS_TABLE }));;
+        const results = await dynamoDb.send(new ScanCommand(params));;
         res.status(200).json(results.Items);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -49,7 +55,7 @@ const get = async (req, res) => {
     };
 
     try {
-        const { Item } = await DynamoDBClient.send(new GetCommand(params));
+        const { Item } = await dynamoDb.send(new GetCommand(params));
         if (Item) {
             res.status(200).json(Item);
         } else {
@@ -79,7 +85,7 @@ const update = async (req, res) => {
     }
 
     try {
-        const foundItem = await DynamoDBClient.send(new GetCommand(params));
+        const foundItem = await dynamoDb.send(new GetCommand(params));
         const getedTags = foundItem.Item.tags;
 
         params.Item.title = title ? title : params.Item.title;
@@ -94,7 +100,7 @@ const update = async (req, res) => {
             }
         }
 
-        await DynamoDBClient.send(new PutCommand(params));
+        await dynamoDb.send(new PutCommand(params));
         res.status(201).json({ message: "successfully Updated!" });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -110,7 +116,7 @@ const deleteTool = async (req, res) => {
     };
 
     try {
-        const result = await DynamoDBClient.send(new DeleteCommand(params));
+        const result = await dynamoDb.send(new DeleteCommand(params));
         if (result.$metadata.httpStatusCode === 200) {
             res.status(200).json({ message: "successfully deleted" });
         } else {

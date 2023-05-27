@@ -1,6 +1,6 @@
 const { cognito } = require("../utils/providers");
 const USER_POOL = process.env.USER_POOL;
-const sendResponse = require("../utils/sendResponse");
+const { sendResponse } = require("../utils/sendResponse");
 
 module.exports.register = async (event) => {
     try {

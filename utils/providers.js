@@ -1,13 +1,15 @@
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, PutCommand, ScanCommand, GetCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
+const { v1: uuid } = require('uuid');
 const AWS = require("aws-sdk");
-const uuid = require('uuid');
-// const dynamoDbClient = DynamoDBDocumentClient.from(client);
-const rekognition = new AWS.Rekognition();
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const cognito = new AWS.CognitoIdentityServiceProvider();
+const TOOLS_TABLE = process.env.TOOLS_TABLE;
+const client = new DynamoDBClient();
+const dynamoDb = DynamoDBDocumentClient.from(client);
 
 module.exports = {
-    rekognition,
+    TOOLS_TABLE,
+    uuid,
     dynamoDb,
     cognito,
     PutCommand,
