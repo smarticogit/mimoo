@@ -6,6 +6,9 @@ plugins:
 
 custom:
   tableName: 'tools-table-${sls:stage}'
+  serverless-offline:
+    useChildProcesses: true
+    noAuth: true
 
 provider:
   name: aws

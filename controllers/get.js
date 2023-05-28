@@ -22,7 +22,7 @@ module.exports.get = async (req) => {
             };
             return sendResponse(200, response);
         } else {
-            return sendResponse(400, { message: "Tool not found!" });
+            return sendResponse(404, { message: "Tool not found!" });
         }
     } catch (error) {
         return sendResponse(400, { message: error.message });
