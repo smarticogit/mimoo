@@ -96,6 +96,12 @@ functions:
       - httpApi:
           path: /login
           method: post
+  getTag:
+    handler: controllers/getTag.get
+    events:
+      - httpApi:
+          path: /getTag
+          method: get
 
 
 resources:
