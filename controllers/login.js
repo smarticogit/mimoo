@@ -8,6 +8,10 @@ module.exports.login = async (event) => {
     try {
         const { email, password } = JSON.parse(event.body);
 
+        if (!email || !password) {
+            return sendResponse(400, { message: "Missing required fields" });
+        }
+
         const response = await cognito
             .adminInitiateAuth({
                 AuthFlow: "ADMIN_NO_SRP_AUTH",
@@ -19,6 +23,10 @@ module.exports.login = async (event) => {
                 },
             })
             .promise();
+
+        if (!response) {
+            return sendResponse(404, { message: "User not found!" });
+        }
 
         const data = await cognito
             .getUser({
@@ -32,6 +40,6 @@ module.exports.login = async (event) => {
             statusCode: 200,
         });
     } catch (error) {
-        return sendResponse(400, { message: error.message });
+        return sendResponse(500, { message: error.message });
     }
 };

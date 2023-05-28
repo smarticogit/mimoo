@@ -22,8 +22,8 @@ module.exports.create = async (req) => {
     try {
         await dynamoDb.send(new PutCommand(params));
 
-        return sendResponse(200, { message: "successfully created!" });
+        return sendResponse(200, { message: "Successfully created!" });
     } catch (error) {
-        return sendResponse(400, { message: error.message });
+        return sendResponse(500, { message: error.message });
     }
 };

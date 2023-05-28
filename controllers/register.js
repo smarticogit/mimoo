@@ -6,6 +6,10 @@ module.exports.register = async (event) => {
     try {
         const { email, password } = JSON.parse(event.body);
 
+        if (!email || !password) {
+            return sendResponse(400, { message: "Missing required fields" });
+        }
+
         const result = await cognito
             .adminCreateUser({
                 UserPoolId: USER_POOL,
@@ -37,6 +41,6 @@ module.exports.register = async (event) => {
 
         return sendResponse(200, { message: `User ${result.User.Username} created successfull!` });
     } catch (error) {
-        return sendResponse(400, { message: error.message });
+        return sendResponse(500, { message: error.message });
     }
 };

@@ -25,6 +25,10 @@ module.exports.update = async (req) => {
 
     try {
         const foundItem = await dynamoDb.send(new GetCommand(params));
+        if (foundItem) {
+            return sendResponse(404, { message: "Tool not found!" });
+        }
+
         const existingTags = Array.isArray(foundItem.Item.tags) ? foundItem.Item.tags : [];
 
         if (typeof title !== 'undefined') {
@@ -50,7 +54,7 @@ module.exports.update = async (req) => {
 
         return sendResponse(200, { message: "Successfully updated!" });
     } catch (error) {
-        return sendResponse(400, { message: error.message });
+        return sendResponse(500, { message: error.message });
     }
 };
 

@@ -11,11 +11,12 @@ custom:
     useChildProcesses: true
     noAuth: true
   autoswagger:
-        title: 'Mimoo API - Service Tools'
-        apiType: 'httpApi'
-        generateSwaggerOnDeploy: false
-        apiKeyHeaders: ['Authorization', 'anyOtherName']
-
+    title: 'Mimoo API - Service Tools'
+    apiType: 'httpApi'
+    generateSwaggerOnDeploy: false
+    apiKeyHeaders: ['Authorization']
+    useStage: true
+    typefiles: ['./swagger/types.ts']
 
 provider:
   name: aws
@@ -51,7 +52,6 @@ provider:
         issuerUrl: {"Fn::Join": ["", ["https://cognito-idp.us-east-1.amazonaws.com/", { Ref: UserPool }]]}
         audience: { Ref: UserClient }
 
-
 functions:
   delete:
     handler: controllers/delete.delete
@@ -61,6 +61,16 @@ functions:
           method: delete
           authorizer: 
             name: userAuthoriser
+          description: "Delete tools by toolId"
+          responses: 
+            200: 
+              description: "Successfully deleted"
+            401:
+              description: "Unauthorized"
+            404:
+              description: "Tool not found!"
+            500:
+              description: "Internal Server Error"
   update:
     handler: controllers/update.update
     events:
@@ -69,6 +79,19 @@ functions:
           method: put
           authorizer: 
             name: userAuthoriser
+          description: "Update tool by toolId"
+          responses: 
+            200: 
+              description: "Successfully update"
+            400:
+              description: "Missing required fields"
+            401:
+              description: "Unauthorized"
+            404:
+              description: "Tool not found!"
+            500:
+              description: "Internal Server Error"
+          bodyType: 'BodyTool'
   get:
     handler: controllers/get.get
     events:
@@ -77,6 +100,18 @@ functions:
           method: get
           authorizer: 
             name: userAuthoriser
+          description: "Get tools by toolId"
+          responses: 
+            200: 
+              description: "Tool content"
+            400:
+              description: "Missing required fields"
+            401:
+              description: "Unauthorized"
+            404:
+              description: "Tool not found!"
+            500:
+              description: "Internal Server Error"
   create:
     handler: controllers/create.create
     events:
@@ -85,32 +120,77 @@ functions:
           method: post
           authorizer: 
             name: userAuthoriser
+          description: "Create tool by body request"
+          responses: 
+            200: 
+              description: "Successfully created!"
+            400:
+              description: "Missing required fields"
+            401:
+              description: "Unauthorized"
+            500:
+              description: "Internal Server Error"
+          bodyType: 'BodyTool'
   list:
     handler: controllers/list.list
     events:
       - httpApi:
           path: /tools
           method: get
+          description: "List the tools!"
+          responses: 
+            200: 
+              description: "Tools list!"
+            500:
+              description: "Internal Server Error"
   register:
     handler: controllers/register.register
     events:
       - httpApi:
           path: /register
           method: post
+          description: "Register new user by email and password by the request body!"
+          responses: 
+            200: 
+              description: "Email and username registered!"
+            400:
+              description: "Missing required fields"
+            500:
+              description: "Internal Server Error"
+          bodyType: 'BodyUser'
   login:
     handler: controllers/login.login
     events:
       - httpApi:
           path: /login
           method: post
+          description: "Login for user!"
+          responses: 
+            200: 
+              description: "Access Token"
+            400:
+              description: "Missing required fields"
+            404:
+              description: "User not found!"
+            500:
+              description: "Internal Server Error"
+          bodyType: 'BodyUser'
   getTag:
     handler: controllers/getTag.get
     events:
       - httpApi:
           path: /getTag
           method: get
-
-
+          queryStringParameters:
+            tag: 
+              required: true
+              type: string
+          description: "Get tools by tag"
+          responses: 
+            200: 
+              description: "Tool content"
+            500:
+              description: "Internal Server Error"
 resources:
   Resources:
     UserPool:

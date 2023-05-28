@@ -47,6 +47,8 @@ exports.default = (serverless) => {
             ],
         }
         : undefined;
-    return Object.assign({ swaggerUI,
-        swaggerJSON }, (swaggerRedirectURI && { swaggerRedirectURI }));
+    return Object.assign({
+        swaggerUI,
+        swaggerJSON
+    }, (swaggerRedirectURI && { swaggerRedirectURI }));
 };

@@ -20,6 +20,6 @@ module.exports.list = async () => {
 
         return sendResponse(200, response);
     } catch (error) {
-        return sendResponse(400, { message: error.message });
+        return sendResponse(500, { message: error.message });
     }
 };

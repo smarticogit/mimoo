@@ -17,6 +17,13 @@ module.exports = {
         "produces": [
           "application/json"
         ],
+        "security": [
+          {
+
+            "Authorization": []
+
+          }
+        ],
         "parameters": [
           {
             "name": "toolId",
@@ -27,13 +34,22 @@ module.exports = {
         ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Successfully deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Tool not found!"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
         "summary": "update",
-        "description": "",
+        "description": "Update tool by toolId",
         "operationId": "update.put./tools/{toolId}",
         "consumes": [
           "application/json"
@@ -41,7 +57,21 @@ module.exports = {
         "produces": [
           "application/json"
         ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body required in the request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BodyTool"
+            }
+          },
           {
             "name": "toolId",
             "in": "path",
@@ -51,13 +81,25 @@ module.exports = {
         ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Successfully update"
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Tool not found!"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "get": {
         "summary": "get",
-        "description": "",
+        "description": "Get tools by toolId",
         "operationId": "get.get./tools/{toolId}",
         "consumes": [
           "application/json"
@@ -65,6 +107,11 @@ module.exports = {
         "produces": [
           "application/json"
         ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
         "parameters": [
           {
             "name": "toolId",
@@ -75,7 +122,19 @@ module.exports = {
         ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Tool content"
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Tool not found!"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -83,7 +142,7 @@ module.exports = {
     "/tools": {
       "post": {
         "summary": "create",
-        "description": "",
+        "description": "Create tool by body request",
         "operationId": "create.post./tools",
         "consumes": [
           "application/json"
@@ -91,16 +150,40 @@ module.exports = {
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body required in the request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BodyTool"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Successfully created!"
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "get": {
         "summary": "list",
-        "description": "",
+        "description": "List the tools!",
         "operationId": "list.get./tools",
         "consumes": [
           "application/json"
@@ -108,10 +191,18 @@ module.exports = {
         "produces": [
           "application/json"
         ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
         "parameters": [],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Tools list!"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -119,7 +210,7 @@ module.exports = {
     "/register": {
       "post": {
         "summary": "register",
-        "description": "",
+        "description": "Register new user by email and password by the request body!",
         "operationId": "register.post./register",
         "consumes": [
           "application/json"
@@ -127,10 +218,31 @@ module.exports = {
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body required in the request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BodyUser"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Email and username registered!"
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -138,7 +250,7 @@ module.exports = {
     "/login": {
       "post": {
         "summary": "login",
-        "description": "",
+        "description": "Login for user!",
         "operationId": "login.post./login",
         "consumes": [
           "application/json"
@@ -146,10 +258,34 @@ module.exports = {
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Body required in the request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BodyUser"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Access Token"
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "404": {
+            "description": "User not found!"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -157,7 +293,7 @@ module.exports = {
     "/getTag": {
       "get": {
         "summary": "getTag",
-        "description": "",
+        "description": "Get tools by tag",
         "operationId": "getTag.get./getTag",
         "consumes": [
           "application/json"
@@ -165,15 +301,89 @@ module.exports = {
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tag",
+            "type": "string",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
-            "description": "200 response"
+            "description": "Tool content"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     }
   },
-  "definitions": {},
-  "securityDefinitions": {}
+  "definitions": {
+    "BodyUser": {
+      "properties": {
+        "email": {
+          "title": "BodyUser.email",
+          "type": "string"
+        },
+        "password": {
+          "title": "BodyUser.password",
+          "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ],
+      "additionalProperties": false,
+      "title": "BodyUser",
+      "type": "object"
+    },
+    "BodyTool": {
+      "properties": {
+        "title": {
+          "title": "BodyTool.title",
+          "type": "string"
+        },
+        "link": {
+          "title": "BodyTool.link",
+          "type": "string"
+        },
+        "description": {
+          "title": "BodyTool.description",
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "title": "BodyTool.tags.[]",
+            "type": "string"
+          },
+          "title": "BodyTool.tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "link",
+        "description",
+        "tags"
+      ],
+      "additionalProperties": false,
+      "title": "BodyTool",
+      "type": "object"
+    }
+  },
+  "securityDefinitions": {
+    "Authorization": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
 };

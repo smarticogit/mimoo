@@ -13,11 +13,11 @@ module.exports.delete = async (req) => {
         const result = await dynamoDb.send(new DeleteCommand(params));
 
         if (result.$metadata.httpStatusCode === 200) {
-            return sendResponse(200, { message: "successfully deleted" });
+            return sendResponse(200, { message: "Successfully deleted!" });
         } else {
             return sendResponse(404, { message: "Tool not found!" });
         }
     } catch (error) {
-        return sendResponse(400, { message: error.message });
+        return sendResponse(500, { message: error.message });
     }
 };
