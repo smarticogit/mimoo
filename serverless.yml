@@ -3,12 +3,19 @@ frameworkVersion: '3'
 
 plugins:
   - serverless-offline
+  - serverless-auto-swagger
 
 custom:
   tableName: 'tools-table-${sls:stage}'
   serverless-offline:
     useChildProcesses: true
     noAuth: true
+  autoswagger:
+        title: 'Mimoo API - Service Tools'
+        apiType: 'httpApi'
+        generateSwaggerOnDeploy: false
+        apiKeyHeaders: ['Authorization', 'anyOtherName']
+
 
 provider:
   name: aws

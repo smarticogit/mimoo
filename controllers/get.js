@@ -25,7 +25,7 @@ module.exports.get = async (req) => {
             return sendResponse(404, { message: "Tool not found!" });
         }
     } catch (error) {
-        return sendResponse(400, { message: error.message });
+        return sendResponse(500, { message: error.message });
     }
 };
 
