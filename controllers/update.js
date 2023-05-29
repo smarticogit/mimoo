@@ -25,10 +25,6 @@ module.exports.update = async (req) => {
 
     try {
         const foundItem = await dynamoDb.send(new GetCommand(params));
-        if (foundItem) {
-            return sendResponse(404, { message: "Tool not found!" });
-        }
-
         const existingTags = Array.isArray(foundItem.Item.tags) ? foundItem.Item.tags : [];
 
         if (typeof title !== 'undefined') {
