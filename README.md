@@ -4,7 +4,7 @@ Mimoo tools is an application for VUTTR (Very Useful Tools to Remember);
 
 The application is a simple repository for managing tools with their respective names, links, descriptions and tags.
 
-
+This project was built using the serverless framework which, through the serverless.yml file, was configured to direct routes to specific functions and already automatically provision a structure in AWS such as the AWS DynamoDB Database, AWS Lambda Functions, AWS API Gateway for managing routes and AWS Cognito for User Authentication.
 
 
 ## Technologies used
