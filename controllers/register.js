@@ -4,9 +4,9 @@ const { sendResponse } = require("../utils/sendResponse");
 
 module.exports.register = async (event) => {
     try {
-        const { email, password } = JSON.parse(event.body);
+        const { email, password, name } = JSON.parse(event.body);
 
-        if (!email || !password) {
+        if (!email || !password || !name) {
             return sendResponse(400, { message: "Missing required fields" });
         }
 
@@ -16,18 +16,23 @@ module.exports.register = async (event) => {
                 Username: email,
                 UserAttributes: [
                     {
+                        Name: "custom:name",
+                        Value: name
+                    },
+                    {
                         Name: "email",
-                        Value: email,
+                        Value: email
                     },
                     {
                         Name: "email_verified",
-                        Value: "true",
+                        Value: "true"
                     },
                 ],
                 MessageAction: "SUPPRESS",
             })
             .promise();
 
+        console.log(`1:`);
         if (result.User) {
             await cognito
                 .adminSetUserPassword({

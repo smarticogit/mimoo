@@ -17,6 +17,16 @@ custom:
     apiKeyHeaders: ['Authorization']
     useStage: true
     typefiles: ['./swagger/types.ts']
+  CognitoAddCustomAttributes: 
+    CognitoUserPoolIdOutputKey: { Ref: UserPool }             
+    CognitoUserPoolClientIdOutputKey: { Ref: UserClient } 
+    CustomAttributes: 
+      - 
+        AttributeDataType: String
+        DeveloperOnlyAttribute: False
+        Mutable: True
+        Name: name 
+        Required: False
 
 provider:
   name: aws
