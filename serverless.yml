@@ -51,8 +51,8 @@ provider:
           Resource:
             - Fn::GetAtt: [ UsersTable, Arn ]
   environment:
-    USER_POOL: { Ref: UserPool } #us-east-1_pXQVf5XVX
-    USER_POOL_CLIENT: { Ref: UserClient } #3vktmpciheao8dutf6o9f4auv6
+    USER_POOL: { Ref: UserPool } 
+    USER_POOL_CLIENT: { Ref: UserClient } 
     TOOLS_TABLE: ${self:custom.tableName}
   httpApi:
     cors: true
